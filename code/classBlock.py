@@ -13,7 +13,7 @@ class Block(object):
         self.center = []
         self.coord = []
         self.type = ''
-        self.rot = 0
+        self.rot = 0  #需要进行规范化，保证rot取值范围在0-3之间      
         self.be_static = False
 
     def collide(self):  #判断有无与现有方块发生碰撞，若有输出True
@@ -47,14 +47,15 @@ class Block(object):
         return y_is_outside
     
     def rotate(self):   #旋转方块
+        #先对slef.rot进行规范化
+        if self.rot > 3 :
+            self.rot -= 4
+        elif self.rot < 0:
+            self.rot += 4
         if self.type in ['I','S','Z']:
-            if self.rot != 0:
-                rot_ = int(self.rot / abs(self.rot) * (self.rot % 2))
-                self.coord = type_dict[self.type][rot_]
+            self.coord = type_dict[self.type][self.rot % 2]
         elif self.type in ['J','L','T']:
-            if self.rot != 0:
-                rot_ = int(self.rot / abs(self.rot) * (self.rot % 4))
-                self.coord = type_dict[self.type][rot_]
+            self.coord = type_dict[self.type][self.rot]
         else:
             return
         
@@ -93,7 +94,7 @@ class Block(object):
 
     def spawn(self):
         self.color = choice(colors)
-        self.center = [7,3]
+        self.center = [7,4]
         self.type = choice(types)
         self.coord = type_dict[self.type][0]
         return 

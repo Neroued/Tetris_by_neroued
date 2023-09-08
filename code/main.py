@@ -68,7 +68,7 @@ while True:
                 screen.blit(res[item],((i-2)*53,(j-2)*53))
     
     #渲染下落方块
-    if is_falling:
+    if is_falling: 
         x , y = falling_block.center
         for p in falling_block.coord:
             cx , cy = p
