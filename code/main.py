@@ -36,6 +36,8 @@ while True:
                 falling_block.move_with_check((1,0))
             elif event.key == pygame.K_DOWN:
                 falling_block.move_with_check((0,1))
+            elif event.key == pygame.K_SPACE:
+                falling_block.direct_to_bottom()
             falling_block.rotate_with_check()    #根据rot旋转
         
         elif event.type == pygame.USEREVENT + 1:    #间隔时间自动下落

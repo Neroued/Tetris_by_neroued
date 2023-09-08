@@ -97,3 +97,10 @@ class Block(object):
         self.type = choice(types)
         self.coord = type_dict[self.type][0]
         return 
+    
+    def direct_to_bottom(self):
+        while True:
+            self.move((0,1))
+            if self.collide() or self.y_outside():
+                self.move((0,-1))
+                break
