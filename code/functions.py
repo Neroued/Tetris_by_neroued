@@ -1,5 +1,12 @@
-from random import choice
-from classBlock import Block
+import pygame,os
+
+pygame.init()
+
+# 导入图片素材,存放在一个字典中
+path = os.getcwd() + os.sep + "pic"
+res = {}
+for p in os.listdir(path):
+    res[p.split(".")[0]] = pygame.image.load(path + os.sep + p)
 
 #定义spawn()，调用Block类，生成一个下落的方块对象
 
@@ -70,14 +77,3 @@ type_dict = {'I': [[[0, -1], [0, 0], [0, 1], [0, 2]],
                    [[-1, -1], [-1, 0], [0, 0], [0, 1]]], 
              'Z': [[[-1, 0], [0, 0], [0, 1], [1, 1]], 
                    [[0, 1], [0, 0], [1, 0], [1, -1]]]}
-
-
-def spawn():
-    tmpblock = Block()
-    tmpblock.color = choice(colors)
-    tmpblock.center = [7,3]
-    tmpblock.type = choice(types)
-    tmpblock.coord = type_dict[tmpblock.type][0]
-    
-    return tmpblock
-
