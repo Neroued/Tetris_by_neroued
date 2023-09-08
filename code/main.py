@@ -22,7 +22,6 @@ while True:
     
     #事件监测
     for event in pygame.event.get():
-
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
@@ -49,7 +48,6 @@ while True:
     if falling_block.be_static == True:
         
         falling_block.static()
-
         is_falling = False
 
         #检测背景是否需要消除某行,并消除
@@ -58,6 +56,7 @@ while True:
         
     #重置底色
     screen.fill('black')
+
 
     #渲染背景
     for j,rang1 in enumerate(background.content):
@@ -71,7 +70,7 @@ while True:
         x , y = falling_block.center
         for p in falling_block.coord:
             cx , cy = p
-            screen.blit(res[falling_block.color],(((x+cx-2)*53),(y+cy)*53))
+            screen.blit(res[falling_block.color],(((x+cx-2)*53),(y+cy-2)*53))
 
     #显示图像
     pygame.display.flip()

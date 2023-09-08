@@ -41,7 +41,7 @@ class Block(object):
         y = self.center[1]
         for p in self.coord:
             cy = p[1]
-            if y + cy >21 or y + cy <2 :
+            if y + cy >21 :
                 y_is_outside = True
                 break
         return y_is_outside
