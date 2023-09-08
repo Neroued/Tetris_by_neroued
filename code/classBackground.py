@@ -11,10 +11,10 @@ class Background(object):
         self.faded = []
     
     def move_on(self):
-        for rang in self.faded:
-            self.content.pop(rang)
+        for index in self.faded:
+            self.content.pop(index)
             self.content.insert(0,[0 for i in range(14)])
-            self.faded.pop()
+        self.faded = []
 
     def fade_check(self):
         for index,rang in enumerate(self.content):
