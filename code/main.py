@@ -11,24 +11,34 @@ pygame.display.set_caption("俄罗斯方块")
 #生成字体对象
 font = pygame.font.Font('ttf\SmileySans-Oblique-2.ttf',25)
 
-is_falling = False
-
 next_block = Block()
-next_block.spawn()
-
 notes = Notes()
 
-pygame.time.set_timer(pygame.USEREVENT + 1, 1000)  # 创建一个计时器，每隔1000毫秒创建一个USEREVENT+1
-timer_speed = 1     #记录目前的游戏速度
-  
-while True:
+#游戏初始化
+def game_init():        
+    global is_falling,timer_speed,fail,falling_block,printed
+    fail = False
+    is_falling = False
+    next_block.spawn()
+    pygame.time.set_timer(pygame.USEREVENT + 1, 1000)  # 创建一个计时器，每隔1000毫秒创建一个USEREVENT+1
+    timer_speed = 1     #记录目前的游戏速度
+    background.restart()   #刷新游戏区域
+    falling_block = Block()
+    printed = False
+    notes.current_note = 0
+
+game_init()
+
+#将游戏主循环变为函数
+def main():     
+    #函数中使用全局变量需要先声明
+    global is_falling,timer_speed,fail,falling_block
     #检测是否有正在下落的方块
     if not is_falling:
         falling_block = copy.deepcopy(next_block)
         next_block.spawn()
-        if falling_block.collide():     #若生成在其他方块上，则直接退出游戏
-            pygame.quit()
-            sys.exit()
+        if falling_block.collide():     #若生成在其他方块上，则游戏失败
+            fail = True
         is_falling = True
     
     #根据当前分数设定游戏速度
@@ -75,6 +85,7 @@ while True:
 
         #根据需要消失的行数加分
         notes.get_note(background.faded)
+        notes.change_best()
 
         #清除需要消失的行
         background.move_on()
@@ -86,15 +97,25 @@ while True:
     screen.fill((255,235,215),rect=(5,5,300,600))
     screen.fill((255,235,215),rect=(310,5,300,600))
 
+    #游戏区域渲染网格
+    #竖线
+    for i in range(9):
+        pygame.draw.line(screen,(184, 171, 162),[35+30*i,5],[35+30*i,605])
+    #横线
+    for i in range(19):
+        pygame.draw.line(screen,(184, 171, 162),[5,35+30*i],[305,35+30*i])
+
     #显示分数
-    text = font.render("当前分数为：{}".format(notes.current_note),True,(0,0,0))
-    text_w, text_h = text.get_size()
-    screen.blit(text,(310+(300-text_w)/2,5+210))
+    note = font.render("当前分数为：{}".format(notes.current_note),True,(0,0,0))
+    screen.blit(note,(394.0, 175))  #这个位置是通过函数算出来的
+
+    #显示最高分数
+    max_notes = font.render("最高分数：{}".format(notes.best_note),True,(0,0,0))
+    screen.blit(max_notes,(404.0, 235))
 
     #显示阶段
     stage = font.render("当前阶段：{}".format(timer_speed),True,(0,0,0))
-    stage_w = stage.get_size()[0]
-    screen.blit(stage,(310+(300-stage_w)/2,5+210+text_h))
+    screen.blit(stage,(406.5, 205))
 
     #渲染游戏静态方块
     for j,rang1 in enumerate(background.content):
@@ -115,7 +136,32 @@ while True:
         cx , cy = p
         screen.blit(res[next_block.color],(((x+cx-3)*30)+310,(y+cy-2)*30+5))
 
-
-
     #显示图像
     pygame.display.flip() 
+
+while True:
+    if not fail:
+        main()
+    else:
+        #在右侧显示提示
+        if printed == False:
+            game_failed = font.render("游戏结束！",True,(0,0,0))
+            restart = font.render("按任意键重新开始",True,(0,0,0))
+
+            screen.blit(game_failed,(410.0, 255))
+            screen.blit(restart,(380.0, 285))
+
+            pygame.display.flip()
+
+            printed = True
+
+        #更新最高分数
+        notes.change_best()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                game_init()
+                
