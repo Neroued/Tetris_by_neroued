@@ -97,6 +97,7 @@ class Block(object):
         self.center = [7,4]
         self.type = choice(types)
         self.coord = type_dict[self.type][0]
+        self.rot = 0
         return 
     
     def direct_to_bottom(self):
