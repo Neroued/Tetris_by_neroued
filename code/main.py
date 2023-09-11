@@ -148,8 +148,8 @@ while True:
             game_failed = font.render("游戏结束！",True,(0,0,0))
             restart = font.render("按任意键重新开始",True,(0,0,0))
 
-            screen.blit(game_failed,(410.0, 255))
-            screen.blit(restart,(380.0, 285))
+            screen.blit(game_failed,(410.0, 295))
+            screen.blit(restart,(380.0, 325))
 
             pygame.display.flip()
 
